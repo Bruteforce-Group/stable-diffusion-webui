@@ -16,6 +16,16 @@ from modules.paths_internal import script_path, config_states_dir
 all_config_states = {}
 
 
+class ConfigStatus:
+    def __int__(self, path):
+        pass
+        self.path = path
+        self.str = None
+
+    def __str__(self):
+        pass
+
+
 def list_config_states():
     global all_config_states
 
@@ -29,10 +39,11 @@ def list_config_states():
             try:
                 with open(path, "r", encoding="utf-8") as f:
                     j = json.load(f)
+                    assert "created_at" in j, '"created_at" does not exist'
                     j["filepath"] = path
                     config_states.append(j)
             except Exception as e:
-                print(f'[ERROR]{path}, {e}')
+                print(f'[ERROR]: Config states {path}, {e}')
 
     config_states = sorted(config_states, key=lambda cs: cs["created_at"], reverse=True)
 
